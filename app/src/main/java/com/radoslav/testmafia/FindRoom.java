@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class FindRoom extends AppCompatActivity {
     ListView lv;
-    long playerPositionInRoom;
+    int playerPositionInRoom;
     ArrayList<String> groups = new ArrayList<>();
     private String ROOM_EXTRA = "room name";
 
@@ -76,7 +76,7 @@ public class FindRoom extends AppCompatActivity {
                 ref.addValueEventListener(new ValueEventListener() {
                                               @Override
                                               public void onDataChange(DataSnapshot snapshot) {
-                                                  playerPositionInRoom = snapshot.getChildrenCount()-1;
+                                                  playerPositionInRoom = Integer.parseInt(String.valueOf(snapshot.getChildrenCount()-1));
 
                                               }
 
@@ -128,6 +128,7 @@ public class FindRoom extends AppCompatActivity {
 
         Map<String, Object> update = new HashMap<>();
         update.put(user, ""+playerPositionInRoom);
+        UserDetails.playerPositionInRoom = playerPositionInRoom;
         ref.updateChildren(update);
 
         Intent intent = new Intent();
