@@ -21,6 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/role_txt"/>
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageHolder"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

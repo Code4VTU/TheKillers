@@ -1,11 +1,12 @@
 package com.radoslav.testmafia;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,15 +17,17 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Day extends AppCompatActivity {
 
     String killed, cured;
-    Button showResultsBtn;
     TextView[] textViews;
-
     private ArrayList<String> names;
     TextView timer;
+
+
     TextView firstTxt, secondTxt, thirdTxt, fourthTxt, fifthTxt, sixthTxt;
     LinearLayout firstLayout, secondLayout, thirdLayout, fourthLayout, fifthLayout, sixthLayout;
 
@@ -52,7 +55,14 @@ public class Day extends AppCompatActivity {
 
         textViews = new TextView[] {firstTxt, secondTxt, thirdTxt, fourthTxt, fifthTxt, sixthTxt};
         linearLayouts = new LinearLayout[] {firstLayout, secondLayout, thirdLayout, fourthLayout, fifthLayout, sixthLayout};
+        int i = 0;
+        for(TextView t : textViews) {
+            if(t.getText().toString().equals("")) {
+                t.setText(UserDetails.names.get(i).toString());
+                i++;
 
+            }
+        }
         AlertDialog.Builder alert = new AlertDialog.Builder(Day.this);
 
         alert.setTitle("User Name");
@@ -110,6 +120,103 @@ public class Day extends AppCompatActivity {
 
                                   }
         );
+
+
+
+
+
+        new CountDownTimer(10000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                timer.setText("Remaining: " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
+            }
+
+            public void onFinish() {
+                System.out.println("Night over");
+                UserDetails.night += 1;
+                Intent intent = new Intent(Day.this, Night.class);
+                if(UserDetails.names == null){
+                    UserDetails.names = new ArrayList<>(names);}
+                startActivity(intent);
+            }
+
+        }.start();
+
+
+
+
+        firstLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(v);
+                TextView text = (TextView) v.findViewById(R.id.first_person_txt);
+                addTurn(text.getText().toString());
+            }
+        });
+
+        secondLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(v);
+                TextView text = (TextView) v.findViewById(R.id.second_person_txt);
+                addTurn(text.getText().toString());
+
+            }
+        });
+
+        thirdLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(v);
+                TextView text = (TextView) v.findViewById(R.id.third_person_txt);
+                addTurn(text.getText().toString());
+            }
+        });
+
+        fourthLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(v);
+                TextView text = (TextView) v.findViewById(R.id.fourth_person_txt);
+                addTurn(text.getText().toString());
+
+            }
+        });
+
+        fifthLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(v);
+                TextView text = (TextView) v.findViewById(R.id.fifth_person_txt);
+                addTurn(text.getText().toString());
+
+            }
+        });
+
+        sixthLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(v);
+                TextView text = (TextView) findViewById(R.id.sixth_person_txt);
+                addTurn(text.getText().toString());
+
+            }
+        });
+
+
+
+
+    }
+
+    private void addTurn(String killed) {
+        Firebase ref = new Firebase(Constants.firebaseUrl).child(UserDetails.group +"/Day"+UserDetails.night);
+
+        Map<String, Object> update = new HashMap<>();
+
+        update.put(UserDetails.userName, killed);
+
+        ref.updateChildren(update);
 
     }
 }

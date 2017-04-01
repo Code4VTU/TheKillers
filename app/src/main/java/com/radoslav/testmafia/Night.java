@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,8 @@ public class Night extends AppCompatActivity {
     TextView roleTxt;
 
     LinearLayout firstLayout, secondLayout, thirdLayout, fourthLayout, fifthLayout, sixthLayout;
+
+    ImageView imageHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,22 @@ public class Night extends AppCompatActivity {
                                                   System.out.println("Your role is " + getRoleText.getRole(Integer.parseInt(rolesInGame[UserDetails.playerPositionInRoom])));
 
                                                   roleTxt.setText("Your role is " + getRoleText.getRole(Integer.parseInt(rolesInGame[UserDetails.playerPositionInRoom])));
+                                                  if(Integer.parseInt(rolesInGame[UserDetails.playerPositionInRoom]) == 0 || Integer.parseInt(rolesInGame[UserDetails.playerPositionInRoom])==1)
+                                                  {
+                                                      imageHolder.setImageResource(R.drawable.kill);
+                                                  }
+                                                  else if(Integer.parseInt(rolesInGame[UserDetails.playerPositionInRoom]) == 2)
+                                                  {
+                                                      imageHolder.setImageResource(R.drawable.doc);
+                                                  }
+                                                  else  if(Integer.parseInt(rolesInGame[UserDetails.playerPositionInRoom]) == 3)
+                                                  {
+                                                      imageHolder.setImageResource(R.drawable.police);
+                                                  }
+                                                  else
+                                                  {
+                                                      imageHolder.setImageResource(R.drawable.civil);
+                                                  }
                                               }
                                           }
                                       }
@@ -110,6 +129,8 @@ public class Night extends AppCompatActivity {
                 System.out.println("Night over");
                 UserDetails.night += 1;
                 Intent intent = new Intent(Night.this, Day.class);
+                if(UserDetails.names == null){
+                UserDetails.names = new ArrayList<>(names);}
                 startActivity(intent);
             }
 
@@ -265,6 +286,8 @@ public class Night extends AppCompatActivity {
         fourthLayout = (LinearLayout) findViewById(R.id.fourth_lin_layout);
         fifthLayout = (LinearLayout) findViewById(R.id.fifth_lin_layout);
         sixthLayout = (LinearLayout) findViewById(R.id.sixth_lin_layout);
+
+        imageHolder = (ImageView) findViewById(R.id.imageHolder);
 
         roleTxt = (TextView) findViewById(R.id.role_txt);
     }
